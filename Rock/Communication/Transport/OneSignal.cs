@@ -168,74 +168,77 @@ namespace Rock.Communication.Transport
                         {
                             if (ValidRecipient(recipient, communication.IsBulkCommunication))
                             {
-                                try
+                                if ( recipient.PersonAliasId.HasValue )
                                 {
-                                    var mergeObjects = recipient.CommunicationMergeValues(mergeFields);
-                                    var message = ResolveText(communication.PushMessage, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot);
-                                    var title = ResolveText(communication.PushTitle, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot);
-                                    var sound = ResolveText( communication.PushSound, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot );
-                                    var data = ResolveText(communication.PushData, currentPerson, communication.EnabledLavaCommands, mergeFields, publicAppRoot);
-                                    var jsonData = Newtonsoft.Json.JsonConvert.DeserializeObject<PushData>(data);
-                                    var url = jsonData.Url;
-                                    string appId = GetAttributeValue("AppId");
-                                    string restApiKey = GetAttributeValue("RestAPIKey");
-                                    OneSignalClient client = new OneSignalClient(restApiKey);
-
-                                    var options = new NotificationCreateOptions
-                                    {
-                                        AppId = new Guid(appId),
-                                        IncludeExternalUserIds = new List<string> { recipient.PersonAliasId.ToString() }
-                                    };
-
-                                    options.Headings.Add(LanguageCodes.English, title);
-                                    options.Contents.Add(LanguageCodes.English, message);
-                                    options.Url = url; 
-                                    NotificationCreateResult response = client.Notifications.Create(options);
-
-                                    bool failed = !string.IsNullOrWhiteSpace(response.Error);
-
-                                    var status = failed ? CommunicationRecipientStatus.Failed : CommunicationRecipientStatus.Delivered;
-
-                                    if (failed)
-                                    {
-                                        recipient.StatusNote = "OneSignal failed to notify devices";
-                                    }
-                                    else
-                                    {
-                                        recipient.SendDateTime = RockDateTime.Now;
-                                    }
-
-                                    recipient.Status = status;
-                                    recipient.TransportEntityTypeName = this.GetType().FullName;
-                                    recipient.UniqueMessageId = response.Id;
-
                                     try
                                     {
-                                        var historyService = new HistoryService(recipientRockContext);
-                                        historyService.Add(new History
+                                        var mergeObjects = recipient.CommunicationMergeValues(mergeFields);
+                                        var message = ResolveText(communication.PushMessage, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot);
+                                        var title = ResolveText(communication.PushTitle, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot);
+                                        var sound = ResolveText( communication.PushSound, currentPerson, communication.EnabledLavaCommands, mergeObjects, publicAppRoot );
+                                        var data = ResolveText(communication.PushData, currentPerson, communication.EnabledLavaCommands, mergeFields, publicAppRoot);
+                                        var jsonData = Newtonsoft.Json.JsonConvert.DeserializeObject<PushData>(data);
+                                        var url = jsonData.Url;
+                                        string appId = GetAttributeValue("AppId");
+                                        string restApiKey = GetAttributeValue("RestAPIKey");
+                                        OneSignalClient client = new OneSignalClient(restApiKey);
+
+                                        var options = new NotificationCreateOptions
                                         {
-                                            CreatedByPersonAliasId = communication.SenderPersonAliasId,
-                                            EntityTypeId = personEntityTypeId,
-                                            CategoryId = communicationCategoryId,
-                                            EntityId = recipient.PersonAlias.PersonId,
-                                            Verb = History.HistoryVerb.Sent.ConvertToString().ToUpper(),
-                                            ChangeType = History.HistoryChangeType.Record.ToString(),
-                                            ValueName = "Push Notification",
-                                            Caption = message.Truncate(200),
-                                            RelatedEntityTypeId = communicationEntityTypeId,
-                                            RelatedEntityId = communication.Id
-                                        });
+                                            AppId = new Guid(appId),
+                                            IncludeExternalUserIds = new List<string> { recipient.PersonAliasId.ToString() }
+                                        };
+
+                                        options.Headings.Add(LanguageCodes.English, title);
+                                        options.Contents.Add(LanguageCodes.English, message);
+                                        options.Url = url; 
+                                        NotificationCreateResult response = client.Notifications.Create(options);
+
+                                        bool failed = !string.IsNullOrWhiteSpace(response.Error);
+
+                                        var status = failed ? CommunicationRecipientStatus.Failed : CommunicationRecipientStatus.Delivered;
+
+                                        if (failed)
+                                        {
+                                            recipient.StatusNote = "OneSignal failed to notify devices";
+                                        }
+                                        else
+                                        {
+                                            recipient.SendDateTime = RockDateTime.Now;
+                                        }
+
+                                        recipient.Status = status;
+                                        recipient.TransportEntityTypeName = this.GetType().FullName;
+                                        recipient.UniqueMessageId = response.Id;
+
+                                        try
+                                        {
+                                            var historyService = new HistoryService(recipientRockContext);
+                                            historyService.Add(new History
+                                            {
+                                                CreatedByPersonAliasId = communication.SenderPersonAliasId,
+                                                EntityTypeId = personEntityTypeId,
+                                                CategoryId = communicationCategoryId,
+                                                EntityId = recipient.PersonAlias.PersonId,
+                                                Verb = History.HistoryVerb.Sent.ConvertToString().ToUpper(),
+                                                ChangeType = History.HistoryChangeType.Record.ToString(),
+                                                ValueName = "Push Notification",
+                                                Caption = message.Truncate(200),
+                                                RelatedEntityTypeId = communicationEntityTypeId,
+                                                RelatedEntityId = communication.Id
+                                            });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ExceptionLogService.LogException(ex, null);
+                                        }
+
                                     }
                                     catch (Exception ex)
                                     {
-                                        ExceptionLogService.LogException(ex, null);
+                                        recipient.Status = CommunicationRecipientStatus.Failed;
+                                        recipient.StatusNote = "OneSignal Exception: " + ex.Message;
                                     }
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    recipient.Status = CommunicationRecipientStatus.Failed;
-                                    recipient.StatusNote = "OneSignal Exception: " + ex.Message;
                                 }
                             }
 
