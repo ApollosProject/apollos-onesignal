@@ -490,7 +490,6 @@ E:\Rock\apollos-onesignal\bin\RestSharp.xml
 E:\Rock\apollos-onesignal\bin\Rock.pdb
 E:\Rock\apollos-onesignal\bin\Rock.xml
 E:\Rock\apollos-onesignal\bin\Rock.Common.pdb
-E:\Rock\apollos-onesignal\bin\Rock.Common.dll.config
 E:\Rock\apollos-onesignal\bin\CSScriptLibrary.xml
 E:\Rock\apollos-onesignal\bin\Rock.Lava.Shared.pdb
 E:\Rock\apollos-onesignal\bin\Rock.Lava.pdb
