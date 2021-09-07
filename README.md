@@ -7,7 +7,7 @@ A Rock transport for OneSignal. Allows notifications to enabled devices through 
 * Go into the `Versions` folder and copy the `apollosProject.OneSignal.dll` from the correct folder for your version of Rock.
 * Paste it in the `Rockweb/Bin` folder of your Rock instance.
 
-### If you are on an unstable (pre-alpha) version of Rock (you pull the Rock repo and build it yourself)
+### If you update and build your Rock project manually
 * Clone down the this `apollos-onesignal` repo [here](https://github.com/ApollosProject/apollos-onesignal).
 * Put the `apollos-onesignal` folder in the same folder as your `Rock` folder. They should be co-located together.
 * In your Rock solution, add the `apollos-onesignal` project. 
