@@ -23,9 +23,11 @@ A Rock transport for OneSignal. Allows notifications to enabled devices through 
 * You will need to change the `Active` flag to `Yes` and add the One Signal `App Id` and `REST API Keys`. You can find these on the OneSignal website on the `Settings` page under `Keys & IDs`.
 <img src="images/rock-transport-settings.png" />
 <img src="images/one-signal-settings.png" />
+
 * Go to `Admin > Communications > Communication Mediums`.
 * Click on `Push Notifications`
 * Make sure the `Active` flag is set to `Yes` and set the `Transport Container` to `One Signal`.
+
 <img src="images/rock-medium-settings.png" />
 
 Now you’re all set to send push notifications through Rock!
