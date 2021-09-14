@@ -2,12 +2,20 @@
 A Rock transport for OneSignal. Allows notifications to enabled devices through the OneSignal service. 
 
 ## Initial Setup
-### If you are on a stable version of Rock (you update Rock from the button in the UI)
+### If you are on a stable version of Rock (you update Rock from the button in the UI) there are two ways to get the OneSignal transport installed:
+#### 1. Download the Apollos Project OneSignal Transport from the Rock Shop.
+* Head to the Rock Shop inside your Rock installation.
+* Go to the "Communications" category and find the "Apollos Project OneSignal Transport" plugin.
+* Install it (it's free!).
+* Follow the setup instructions found in the store or below under `Rock Setup`.
+
+#### 2. Clone the repo and install it manually.
 * Clone down the `apollos-onesignal` repo [here](https://github.com/ApollosProject/apollos-onesignal).
 * Go into the `Versions` folder and copy the `apollosProject.OneSignal.dll` from the correct folder for your version of Rock.
 * Paste it in the `Rockweb/Bin` folder of your Rock instance.
 * Go into the `bin` folder of the `apollos-onesignal` repo and copy the `Apollos.OneSignal.RestAPIv3.Client.dll` file.
 * Paste it in the `Rockweb/Bin` folder of your Rock instance.
+* Follow the setup instructions found below under `Rock Setup`.
 
 ### If you update and build your Rock project manually
 * Clone down the `apollos-onesignal` repo [here](https://github.com/ApollosProject/apollos-onesignal).
