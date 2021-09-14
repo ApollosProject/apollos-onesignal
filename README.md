@@ -3,7 +3,7 @@ A Rock transport for OneSignal. Allows notifications to enabled devices through 
 
 ## Initial Setup
 ### If you are on a stable version of Rock (you update Rock from the button in the UI) there are two ways to get the OneSignal transport installed:
-#### 1. Download the Apollos Project OneSignal Transport from the Rock Shop.
+#### 1. Download the Apollos Project OneSignal Transport from the Rock Shop. This is the recommended way to get the plugin.
 * Head to the Rock Shop inside your Rock installation.
 * Go to the "Communications" category and find the "Apollos Project OneSignal Transport" plugin.
 * Install it (it's free!).
